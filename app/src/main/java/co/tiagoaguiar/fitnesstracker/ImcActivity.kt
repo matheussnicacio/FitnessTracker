@@ -1,6 +1,7 @@
 package co.tiagoaguiar.fitnesstracker
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -24,7 +25,7 @@ class ImcActivity : AppCompatActivity() {
         setContentView(R.layout.activity_imc)
 
         editWeight = findViewById(R.id.edit_imc_weight)
-        editHeight = findViewById(R.id.edit_imc_weight)
+        editHeight = findViewById(R.id.edit_imc_height)
 
         val btnSend: Button = findViewById(R.id.btn_imc_send)
         btnSend.setOnClickListener {
@@ -37,15 +38,24 @@ class ImcActivity : AppCompatActivity() {
 
             }
             // Aqui deu sucesso
+            val weight = editWeight.text.toString().toInt()
+            val height = editHeight.text.toString().toInt()
+
+            val result = calculateImc(weight, height)
+            Log.d("Teste", "Resultado: $result")
         }
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun calculateImc(weight: Int, height: Int): Double {
+        // peso / (altura * altura)
+
+        return weight / ((height / 100.0) * (height / 100.0))
     }
 
     private fun validate(): Boolean {
@@ -78,7 +88,6 @@ class ImcActivity : AppCompatActivity() {
 //        }
 //        return false
 //    }
-
 
         // opcao 3 : Forma mais  enxuta possivel para retornar um true | false
         // return direto o que for verdadeiro
