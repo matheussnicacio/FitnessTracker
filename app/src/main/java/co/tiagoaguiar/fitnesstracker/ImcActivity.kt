@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -43,6 +44,9 @@ class ImcActivity : AppCompatActivity() {
 
             val result = calculateImc(weight, height)
             Log.d("Teste", "Resultado: $result")
+
+            val imcResponseId = imcResponse(result)
+            Toast.makeText(this, imcResponseId, Toast.LENGTH_SHORT).show()
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -51,6 +55,60 @@ class ImcActivity : AppCompatActivity() {
             insets
         }
     }
+
+    /*
+    class R {
+    class string {
+         imc_severely_low_weight = 213141233143213
+         imc_very_low_weight     = 142312313414122
+    }
+    class layout {
+    }
+    class string {
+    }
+
+    }
+
+    R.string
+    R.layout
+    R.id
+     */
+
+@StringRes
+    private fun imcResponse(imc: Double): Int {
+
+        return when {
+            imc < 15.0 -> R.string.imc_severely_low_weight
+            imc < 16.0 -> R.string.imc_very_low_weight
+            imc < 18.5 -> R.string.imc_low_weight
+            imc < 25.0 -> R.string.normal
+            imc < 30.0 -> R.string.imc_high_weight
+            imc < 35.0 -> R.string.imc_so_high_weight
+            imc < 40.0 -> R.string.imc_severely_high_weight
+            else -> R.string.imc_extreme_weight
+
+        }
+
+//        if (imc < 15.0) {
+//            return R.string.imc_severely_low_weight
+//        } else if (imc < 16.0) {
+//            return R.string.imc_very_low_weight
+//        } else if (imc < 18.5) {
+//            return R.string.imc_low_weight
+//        } else if (imc < 25.0) {
+//            return R.string.normal
+//        } else if (imc < 30.0) {
+//            return R.string.imc_high_weight
+//        } else if (imc < 35.0) {
+//            return R.string.imc_so_high_weight
+//        } else if (imc < 40.0) {
+//            return R.string.imc_severely_high_weight
+//        } else {
+//            return R.string.imc_extreme_weight
+//        }
+
+    }
+
 
     private fun calculateImc(weight: Int, height: Int): Double {
         // peso / (altura * altura)
