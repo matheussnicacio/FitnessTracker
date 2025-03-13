@@ -1,11 +1,13 @@
 package co.tiagoaguiar.fitnesstracker
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -46,7 +48,31 @@ class ImcActivity : AppCompatActivity() {
             Log.d("Teste", "Resultado: $result")
 
             val imcResponseId = imcResponse(result)
-            Toast.makeText(this, imcResponseId, Toast.LENGTH_SHORT).show()
+
+            // Builder: classe construtora que provê funcoes metodos para criar as propriedades que querer
+            val dialog = AlertDialog.Builder(this)
+
+            dialog.setTitle(getString(R.string.imc_response, result))
+            dialog.setMessage(imcResponseId)
+
+            // Opçao 1 : Da mais trabalho
+//            dialog.setPositiveButton(android.R.string.ok, object : DialogInterface.OnClickListener {
+//                override fun onClick(dialog: DialogInterface?, which: Int) {
+//                // Aqui vai rodar depois do click
+//
+//                }
+//
+//            })
+
+            // Opçao 2 usando Lambda
+            dialog.setPositiveButton(android.R.string.ok){ dialog,which ->
+                //Aqui vai rodar o click
+
+            }
+
+            val d = dialog.create()
+            d.show()
+
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -74,7 +100,7 @@ class ImcActivity : AppCompatActivity() {
     R.id
      */
 
-@StringRes
+    @StringRes
     private fun imcResponse(imc: Double): Int {
 
         return when {
