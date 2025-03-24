@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -41,14 +42,7 @@ class MainActivity : AppCompatActivity() {
                 color = Color.YELLOW
             ),
         )
-        mainItems.add(
-            MainItem(
-                id = 2,
-                drawableId = R.drawable.baseline_remove_red_eye_24,
-                textStringId = R.string.tmb,
-                color = Color.MAGENTA
-            ),
-        )
+
 
 
 
@@ -60,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = MainAdapter(mainItems)
         rvMain = findViewById(R.id.rv_main)
         rvMain.adapter = adapter
-        rvMain.layoutManager = LinearLayoutManager(this)
+        rvMain.layoutManager = GridLayoutManager(this,2)
 
         // classe para administrar a recyclerView a suas celulas (os seus layouts de itens)
         // Adapter ->
