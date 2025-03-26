@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity(), OnItemClickListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var rvMain: RecyclerView
 
@@ -44,7 +44,41 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         // 1) o layout XML
         // 2) a onde a recyclerview vai aparecer (tela principal, tela cheia)
         // 3) logica - conectar o xml da celula DENTRO do recyclerView + a sua quantidade de elementos dinamicos
-        val adapter = MainAdapter(mainItems, this)
+//        val adapter = MainAdapter(mainItems, object : OnItemClickListener{
+//            // METODO 2 : IMPLEMENTANDO VIA OBJETO ANONIMO
+//            override fun onClick(id: Int) {
+//
+//                when(id) {
+//                    1 -> {
+//                        val intent = Intent(this@MainActivity, ImcActivity::class.java)
+//                        startActivity(intent)
+//                    }
+//                    2 -> {
+//                        // abrir uma outra activity
+//                    }
+//                }
+//                Log.i("Teste", "clicou $id!!")
+//
+//            }
+//
+//        })
+
+        val adapter = MainAdapter(mainItems) { id ->
+            // METODO 3 : IMPLEMENTANDO VIA FUNCTIONS
+
+            when (id) {
+                1 -> {
+                    val intent = Intent(this@MainActivity, ImcActivity::class.java)
+                    startActivity(intent)
+                }
+
+                2 -> {
+                    // abrir uma outra activity
+                }
+            }
+            Log.i("Teste", "clicou $id!!")
+        }
+
         rvMain = findViewById(R.id.rv_main)
         rvMain.adapter = adapter
         rvMain.layoutManager = GridLayoutManager(this, 2)
@@ -53,22 +87,24 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         // Adapter ->
     }
 
-    override fun onClick(id: Int) {
-        when(id) {
-            1 -> {
-                val intent = Intent(this, ImcActivity::class.java)
-                startActivity(intent)
-            }
-            2 -> {
-                // abrir uma outra activity
-            }
-        }
-        Log.i("Teste", "clicou $id!!")
-    }
+    // METODO 1 : USANDO IMPLEMENTACAO INTERFACE VIA ACTIVITY
+//    override fun onClick(id: Int) {
+//        when(id) {
+//            1 -> {
+//                val intent = Intent(this, ImcActivity::class.java)
+//                startActivity(intent)
+//            }
+//            2 -> {
+//                // abrir uma outra activity
+//            }
+//        }
+//        Log.i("Teste", "clicou $id!!")
+//    }
 
     private inner class MainAdapter(
         private val mainItems: List<MainItem>,
-        private val onItemClickListener: OnItemClickListener
+//        private val onItemClickListener: OnItemClickListener
+        private val onItemClickListener: (Int) -> Unit,
     ) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
         // 1 - Qual é o layout XML da celula especifica (item)
@@ -101,7 +137,10 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                 container.setBackgroundColor(item.color)
 
                 container.setOnClickListener {
-                    onItemClickListener.onClick(item.id)
+                    // Aqui ele é uma ref. function
+                    onItemClickListener.invoke(item.id)
+                    // Aqui ele é uma interface
+//                    onItemClickListener.onClick(item.id)
                 }
             }
         }
@@ -109,11 +148,9 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     }
 
 
-
-
     // 3 maneiras de escutar eventos de click usando celular (viewholder) activities
-    // 1. impl interface (nesse video)
-    // 2. objetos anonimos (prox.)
-    // 3. funcional (prox.)
+    //  !                   1. [X] impl interface (nesse video)
+    //  !!                  2. objetos anonimos (prox.) !!
+    //  !!! -> kotlin       3. funcional (prox.) !!! -> kotlin
 
 }
